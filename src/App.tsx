@@ -1,26 +1,29 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import BookingPage from './pages/booking';
+import { Provider } from 'react-redux';
+import { store } from './store';
+import { StyleSheetManager } from 'styled-components';
+import isPropValid from '@emotion/is-prop-valid';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Provider store={store}>
+      <StyleSheetManager shouldForwardProp={shouldForwardProp}>
+        <div className="App">
+          <BookingPage />
+        </div>
+      </StyleSheetManager>
+    </Provider>
   );
+}
+
+//For using styled components and removing warnings from console
+function shouldForwardProp(propName: string, target: any) {
+  if (typeof target === 'string') {
+    return isPropValid(propName);
+  }
+  return true;
 }
 
 export default App;
