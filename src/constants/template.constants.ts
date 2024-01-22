@@ -23,3 +23,9 @@ export enum requestResult {
   success = 'Ваша заявка отправлена',
   fail = 'Ошибка. Попробуйте позже'
 }
+
+export enum validationMessages {
+  input = 'Заполните поле',
+  phone = 'Неправильно введен номер телефона',
+  mail = 'Неправильно введен email'
+}
