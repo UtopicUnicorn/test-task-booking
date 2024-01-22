@@ -1,6 +1,7 @@
 import React from 'react';
 
 import styled from 'styled-components';
+import { Text } from './text';
 
 export interface InputInterface {
   id: string;
@@ -19,21 +20,36 @@ export interface InputInterface {
   label?: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   background?: string;
+  error?: string;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
 interface InputPropsInterface {
   background?: string;
+  error?: string;
+}
+interface InputContainerInterface {
+  error?: string;
 }
 
-const InputContainer = styled.div`
+const InputWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  box-sizing: border-box;
+  align-items: flex-end;
+  justify-content: center;
+`;
+
+const InputContainer = styled.div<InputContainerInterface>`
   position: relative;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 90%;
+  width: 100%;
   height: 55px;
-  border: 2px solid #000;
+  border: 2px solid ${(props) => (props.error !== '' ? '#ff0000' : '#000')};
   border-radius: 3px;
   box-sizing: border-box;
 `;
@@ -69,17 +85,27 @@ const InputField = styled.input<InputPropsInterface>`
 
 export const Input = (props: InputInterface) => {
   return (
-    <InputContainer>
-      <InputField
-        id={props.id}
-        name={props.id}
-        placeholder={props.placeholder}
-        inputMode={props.inputMode}
-        onChange={props.onChange}
-        value={props.value}
-        background={props.background}
-      />
-      {props.label ? <InputLabel htmlFor={props.id}>{props.label}</InputLabel> : null}
-    </InputContainer>
+    <InputWrapper>
+      <InputContainer error={props.error}>
+        <InputField
+          id={props.id}
+          name={props.id}
+          placeholder={props.placeholder}
+          inputMode={props.inputMode}
+          onChange={props.onChange}
+          value={props.value}
+          background={props.error === '' ? props.background : 'rgba(230, 70, 70, 0.1)'}
+          onKeyDown={props.onKeyDown}
+        />
+        {props.label ? <InputLabel htmlFor={props.id}>{props.label}</InputLabel> : null}
+      </InputContainer>
+      {props.error !== '' ? (
+        <>
+          <Text color={'#ff0000'} fontWeight={400} fontSize={10}>
+            {props.error}
+          </Text>
+        </>
+      ) : null}
+    </InputWrapper>
   );
 };

@@ -1,14 +1,19 @@
 import React from 'react';
 
 import styled from 'styled-components';
+import { LoadingDot } from './loading';
 
 interface ButtonInterface {
   disabled: boolean;
   type: 'button' | 'submit' | 'reset' | undefined;
   title: string;
+  loading: boolean;
 }
 
-const StyledButton = styled.button`
+interface StyledButtonProps {
+  isLoading: boolean;
+}
+const StyledButton = styled.button<StyledButtonProps>`
   border-radius: 4px;
   overflow: hidden;
   background-color: #ff4114;
@@ -26,15 +31,23 @@ const StyledButton = styled.button`
     background-color: #f72f00;
   }
   &:disabled {
-    background-color: white;
+    background-color: ${(props) => (props.isLoading ? '#DC2A00' : '#fff')};
     color: #000;
   }
 `;
 
 export const Button = (props: ButtonInterface) => {
   return (
-    <StyledButton disabled={props.disabled} type={props.type}>
-      {props.title}
+    <StyledButton disabled={props.disabled} type={props.type} isLoading={props.loading}>
+      {!props.loading ? (
+        props.title
+      ) : (
+        <>
+          <LoadingDot delay={'0.1s'} />
+          <LoadingDot delay={'0.2s'} />
+          <LoadingDot delay={'0.3s'} />
+        </>
+      )}
     </StyledButton>
   );
 };
